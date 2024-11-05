@@ -1,11 +1,11 @@
-FROM node:10.16.0-alpine AS builder
+FROM node:16-alpine AS builder
 
 WORKDIR /src
 COPY src/package.json .
 RUN npm install
 
 # app
-FROM node:10.16.0-alpine
+FROM node:16-alpine
 
 EXPOSE 80
 CMD ["node", "server.js"]
