@@ -1,0 +1,17 @@
+FROM golang:1.13 AS builder
+ENV CGO_ENABLED=0 
+
+COPY main.go .
+RUN go build -o /web/server
+RUN chmod +x /web/server
+
+FROM alpine:3.9
+EXPOSE 80
+CMD ["/web/server"]
+ENV USER=saukratesk
+
+WORKDIR web
+COPY --from=builder /web/server .
+COPY index.html .
+
+

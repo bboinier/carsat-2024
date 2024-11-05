@@ -1,0 +1,19 @@
+FROM golang:1.20 AS builder
+ENV CGO_ENABLED=0 
+
+COPY main.go . 
+RUN go env -w GO111MODULE=off 			# désactive les modules
+RUN go build -o /web/server -ldflags="-s -w" 	# retire tout ce qui sert au debug
+RUN chmod +x /web/server
+
+# busybox very ligth
+FROM busybox:stable-uclibc			
+EXPOSE 80
+CMD ["/web/server"]
+ENV USER=saukratesk
+
+WORKDIR web
+COPY --from=builder /web/server .
+COPY index.html .
+
+
