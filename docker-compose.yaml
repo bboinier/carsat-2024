@@ -1,0 +1,14 @@
+services: 
+  accesslog:
+    image: access-log
+  iotd:
+    image: image-of-the-day
+    ports:
+      - "80"
+  image-gallery:
+    image: image-gallery
+    ports:
+      - "8010:80"
+    depends_on:
+      - accesslog
+      - iotd
