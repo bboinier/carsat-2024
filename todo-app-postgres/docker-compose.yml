@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todo_db
+    ports:
+      - "5432:5432"  # Mapper le port PostgreSQL
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - todo_network  # Utiliser un réseau personnalisé
+
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db/todo_db
+      BACKGROUND_COLOR: '#9BFF33'
+      SQLALCHEMY_SILENCE_UBER_WARNING: 1
+      PYTHONUNBUFFERED: 1
+    depends_on:
+      - db
+    networks:
+      - todo_network  # Utiliser le même réseau personnalisé
+
+volumes:
+  postgres_data:
+
+networks:
+  todo_network:  # Définir le réseau personnalisé

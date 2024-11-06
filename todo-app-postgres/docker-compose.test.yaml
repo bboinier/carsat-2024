@@ -1,0 +1,6 @@
+name: app
+services: 
+  test:
+    build: ./test
+    networks:
+      - todo_network
